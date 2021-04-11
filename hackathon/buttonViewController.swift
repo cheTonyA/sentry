@@ -18,26 +18,48 @@ class buttonViewController: UIViewController {
     var seconds = 15
     var timer = Timer()
     
-    //function which makes the imer begin
+    //function which makes the timer begin
     func runTimer(){
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(buttonViewController.updateTimer)), userInfo: nil, repeats: true)
     }
     
+    func resetTimer(){
+        timer.invalidate()
+        seconds = 15
+        runTimer()
+    }
+    
+    func stopTimer(){
+        
+            //seconds = -1
+            timer.invalidate()
+            label.text = "HELP IS ON THE WAY"
+        
+    }
     
     @objc func updateTimer(){
         
+        if seconds > -1 {
+            seconds -= 1
+        }
         
-        seconds -= 1
         label.text = "\(seconds)"
         
         //Once seconds(the timer) hits 0 the timer is stoped by timer.invalidate then help is called
-        if seconds == 0 {
-            timer.invalidate()
+       if seconds == 0 {
             print("call for help")
-            label.text = "HELP IS ON THE WAY!!!"
+            stopTimer()
+            timer.invalidate()
             
+       }
+        
+        if seconds == -1 {
+            label.text = "HELP IS ON THE WAY"
         }
+        
+        
+        
     }
     
     @IBAction func button(_ sender: Any) {
@@ -60,14 +82,14 @@ class buttonViewController: UIViewController {
             
             runTimer()
             updateTimer()
-            
-            print("CONTACTS NOTIFIED!!!!")
             labelOne.text = "EMERGENCY CONTACTS NOTIFIED!!!!"
+            
             
             print("UIGestureRecognizerStateEnded")
             //Do Whatever You want on End of Gesture
         }
         else if sender.state == .began {
+            print("CONTACTS NOTIFIED!!!!")
             print("UIGestureRecognizerStateBegan.")
             //Do Whatever You want on Began of Gesture
         }
